@@ -1,0 +1,4 @@
+project/model/audio_emotion_rnn_saved_model/variables/variables.data-00000-of-00001 filter=lfs diff=lfs merge=lfs -text
+project/model/audio_emotion_rnn.h5 filter=lfs diff=lfs merge=lfs -text
+workflow[[:space:]]diagram/mlops[[:space:]]diagram[[:space:]]kanika.jpg filter=lfs diff=lfs merge=lfs -text
+Deep_learning_emotion_detection[[:space:]](1).ipynb filter=lfs diff=lfs merge=lfs -text
