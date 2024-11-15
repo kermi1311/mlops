@@ -1,0 +1,50 @@
+name: Azure ML CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Triggers the workflow on push to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Configure Azure credentials
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Install Azure ML SDK
+      run: pip install azure-ai-ml
+
+    - name: Run training script
+      env:
+        AML_WORKSPACE_NAME: ${{ secrets.AML_WORKSPACE_NAME }}
+        AML_RESOURCE_GROUP: ${{ secrets.AML_RESOURCE_GROUP }}
+        AML_SUBSCRIPTION_ID: ${{ secrets.AML_SUBSCRIPTION_ID }}
+      run: |
+        # Run the training script
+        python project/train_rnn_model.py
+
+    - name: Register Model in Azure ML
+      env:
+        AML_WORKSPACE_NAME: ${{ secrets.AML_WORKSPACE_NAME }}
+        AML_RESOURCE_GROUP: ${{ secrets.AML_RESOURCE_GROUP }}
+        AML_SUBSCRIPTION_ID: ${{ secrets.AML_SUBSCRIPTION_ID }}
+      run: |
+        # Register the model in Azure ML
+        python project/register_model.py
