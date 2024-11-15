@@ -1,0 +1,38 @@
+# azure-pipelines.yml
+
+trigger:
+- main  # Trigger pipeline on pushes to the main branch
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.8'  # Set to match your Python version (e.g., 3.8)
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    echo "Running Tests..."
+    # Add commands to run your tests here, for example:
+    # pytest tests/ or python -m unittest
+  displayName: 'Run tests'
+
+- script: |
+    echo "Training model..."
+    python train_rnn_model.py  # Replace with actual training script
+  displayName: 'Train Model'
+
+- script: |
+    echo "Registering model..."
+    python register_model.py  # Replace with actual registration script
+  displayName: 'Register Model'
+
+- script: |
+    echo "Deploying model..."
+    python deploy_model.py  # Replace with actual deployment script
+  displayName: 'Deploy Model'
